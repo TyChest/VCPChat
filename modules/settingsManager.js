@@ -581,7 +581,19 @@ const settingsManager = (() => {
         displaySettingsForItem: displaySettingsForItem,
         populateAssistantAgentSelect: populateAssistantAgentSelect,
         // Expose for external use if needed, e.g., in the save function
-        completeVcpUrl: completeVcpUrl
+        completeVcpUrl: completeVcpUrl,
+        // 新增自动保存方法
+        triggerAutoSave: () => {
+            const currentSelectedItem = refs.currentSelectedItemRef.get();
+            if (currentSelectedItem && currentSelectedItem.id && currentSelectedItem.type === 'agent') {
+                console.log('[SettingsManager] Triggering auto-save for agent:', currentSelectedItem.id);
+                // 模拟表单提交事件来触发保存
+                if (agentSettingsForm) {
+                    const fakeEvent = { preventDefault: () => {} };
+                    saveCurrentAgentSettings(fakeEvent);
+                }
+            }
+        }
     };
 
     /**

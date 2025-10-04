@@ -1,10 +1,18 @@
 /* Advanced Prompt Editor Styles */
 
+.advanced-prompt-editor-container {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
 .advanced-prompt-editor {
     border: 1px solid var(--border-color);
     border-radius: 8px;
     background-color: var(--input-bg);
     overflow: hidden;
+    width: 100%;
+    max-width: 100%;
 }
 
 .editor-toolbar {
@@ -47,17 +55,21 @@
     display: flex;
     flex-direction: column;
     height: 300px;
+    overflow: hidden;
+    width: 100%;
 }
 
 .text-editor-container {
     flex: 1;
     padding: 12px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .text-editor {
     width: 100%;
     min-height: 150px;
+    max-width: 100%;
     padding: 8px;
     border: none;
     background-color: transparent;
@@ -67,6 +79,9 @@
     outline: none;
     resize: none;
     font-family: inherit;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    overflow-x: hidden;
 }
 
 .text-editor:focus {
@@ -103,7 +118,9 @@
     background-color: var(--panel-bg);
     border-top: 1px solid var(--border-color);
     min-height: 50px;
-    overflow-x: auto;
+    overflow: hidden;
+    width: 100%;
+    flex-shrink: 0;
 }
 
 .hidden-elements-label {
@@ -120,6 +137,8 @@
     align-items: center;
     flex-wrap: wrap;
     min-width: 0;
+    overflow: hidden;
+    width: 100%;
 }
 
 /* 隐藏元素小圆点 */
@@ -128,20 +147,27 @@
     align-items: center;
     gap: 6px;
     padding: 4px 8px;
-    background-color: var(--user-bubble-bg);
-    color: white;
+    background-color: var(--button-bg);
+    color: var(--primary-text);
     border-radius: 15px;
     font-size: 0.8em;
     cursor: grab;
     transition: all 0.2s ease;
     position: relative;
     max-width: 150px;
+    min-width: 0;
+    flex-shrink: 0;
+    border: 1px solid var(--border-color);
+    word-break: break-all;
+    overflow-wrap: break-word;
 }
 
 .hidden-element-dot:hover {
     background-color: var(--button-hover-bg);
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-color: var(--button-hover-bg);
+    cursor: context-menu;
 }
 
 .hidden-element-dot:active {
@@ -160,42 +186,40 @@
     text-overflow: ellipsis;
     flex: 1;
     min-width: 0;
+    max-width: 120px;
 }
 
-.dot-actions {
-    display: flex;
-    gap: 2px;
-    opacity: 0;
-    transition: opacity 0.2s ease;
+/* 隐藏元素右键菜单样式 */
+.context-menu.hidden-element-menu {
+    min-width: 120px;
+    background-color: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.hidden-element-dot:hover .dot-actions {
-    opacity: 1;
-}
-
-.dot-rename-btn,
-.dot-delete-btn {
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    padding: 2px;
-    border-radius: 3px;
-    font-size: 0.7em;
-    transition: background-color 0.2s ease;
+.context-menu.hidden-element-menu .context-menu-item {
+    padding: 10px 12px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 16px;
-    height: 16px;
+    gap: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    color: var(--primary-text);
 }
 
-.dot-rename-btn:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+.context-menu.hidden-element-menu .context-menu-item:hover {
+    background-color: var(--accent-bg);
+    color: var(--highlight-text);
 }
 
-.dot-delete-btn:hover {
-    background-color: rgba(255, 0, 0, 0.3);
+.context-menu.hidden-element-menu .context-menu-item svg {
+    stroke: var(--primary-text);
+    flex-shrink: 0;
+}
+
+.context-menu.hidden-element-menu .context-menu-item:hover svg {
+    stroke: var(--highlight-text);
 }
 
 /* 上下文菜单 */
@@ -300,6 +324,140 @@
     font-size: 0.85em;
 }
 
+/* 隐藏元素编辑模态框 */
+.hidden-element-editor-modal {
+    font-family: inherit;
+}
+
+.hidden-element-editor-modal .modal-content {
+    background-color: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    min-width: 400px;
+    max-width: 600px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: var(--highlight-text);
+    font-size: 1.1em;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: var(--secondary-text);
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.modal-close:hover {
+    background-color: var(--accent-bg);
+    color: var(--highlight-text);
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: var(--secondary-text);
+    font-size: 0.9em;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--input-bg);
+    color: var(--primary-text);
+    font-size: 0.9em;
+    font-family: inherit;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.4;
+}
+
+.form-group input[type="color"] {
+    padding: 4px;
+    width: 50px;
+    height: 36px;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-save {
+    background-color: var(--user-bubble-bg);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease;
+}
+
+.btn-save:hover {
+    background-color: var(--button-hover-bg);
+}
+
+.btn-cancel {
+    background-color: var(--button-bg);
+    color: var(--primary-text);
+    border: 1px solid var(--border-color);
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease;
+}
+
+.btn-cancel:hover {
+    background-color: var(--button-hover-bg);
+}
+
 /* 拖拽占位符 */
 .drop-placeholder {
     width: 20px;
@@ -342,6 +500,37 @@
         padding: 3px 6px;
         font-size: 0.75em;
     }
+}
+
+/* 确保没有横向滚动条的全局防护 */
+.advanced-prompt-editor *,
+.advanced-prompt-editor-container *,
+.advanced-prompt-editor *:before,
+.advanced-prompt-editor *:after {
+    box-sizing: border-box;
+}
+
+/* 防止内容溢出导致的滚动条 */
+.advanced-prompt-editor {
+    contain: layout style;
+}
+
+/* 严格禁止横向滚动条 */
+.advanced-prompt-editor,
+.advanced-prompt-editor-container,
+.editor-main,
+.text-editor-container,
+.hidden-elements-bar,
+.hidden-elements-container {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+}
+
+/* 确保文本不会导致容器变宽 */
+.text-editor {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 /* 亮色主题适配 */
@@ -401,4 +590,169 @@ body.light-theme .context-menu {
     .hidden-element-dot {
         transition: none;
     }
+}
+
+/* 禁用内容编辑器模态框样式 */
+.disabled-content-editor-modal {
+    font-family: inherit;
+}
+
+.disabled-content-editor-modal .modal-content {
+    background-color: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    min-width: 400px;
+    max-width: 600px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.disabled-content-editor-modal .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.disabled-content-editor-modal .modal-header h3 {
+    margin: 0;
+    color: var(--highlight-text);
+    font-size: 1.1em;
+}
+
+.disabled-content-editor-modal .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: var(--secondary-text);
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.disabled-content-editor-modal .modal-close:hover {
+    background-color: var(--accent-bg);
+    color: var(--highlight-text);
+}
+
+.disabled-content-editor-modal .modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.disabled-content-editor-modal .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.disabled-content-editor-modal .form-group label {
+    font-weight: 500;
+    color: var(--secondary-text);
+    font-size: 0.9em;
+}
+
+.disabled-content-editor-modal .form-group textarea {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--input-bg);
+    color: var(--primary-text);
+    font-size: 0.9em;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.4;
+}
+
+.disabled-content-editor-modal .content-preview {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--input-bg);
+    color: var(--primary-text);
+    font-size: 0.9em;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.disabled-content-editor-modal .disabled-text-preview {
+    background-color: rgba(128, 128, 128, 0.2);
+    color: #888;
+    padding: 2px 4px;
+    border-radius: 3px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.disabled-content-editor-modal .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+.disabled-content-editor-modal .btn-save {
+    background-color: var(--user-bubble-bg);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease;
+}
+
+.disabled-content-editor-modal .btn-save:hover {
+    background-color: var(--button-hover-bg);
+}
+
+.disabled-content-editor-modal .btn-cancel {
+    background-color: var(--button-bg);
+    color: var(--primary-text);
+    border: 1px solid var(--border-color);
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease;
+}
+
+.disabled-content-editor-modal .btn-cancel:hover {
+    background-color: var(--button-hover-bg);
+}
+
+/* 禁用内容保护样式增强 */
+.disabled-text {
+    user-select: text; /* 允许选择但不允许编辑 */
+    caret-color: transparent; /* 隐藏光标 */
+}
+
+.disabled-text::selection {
+    background-color: rgba(128, 128, 128, 0.3);
+}
+
+/* 防止禁用内容被编辑的视觉反馈 */
+.disabled-text:focus {
+    outline: none;
+    background-color: rgba(128, 128, 128, 0.3);
+}
+
+/* 亮色主题适配 */
+body.light-theme .disabled-content-editor-modal .modal-content {
+    background-color: var(--secondary-bg);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
