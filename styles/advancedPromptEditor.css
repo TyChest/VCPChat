@@ -1,0 +1,404 @@
+/* Advanced Prompt Editor Styles */
+
+.advanced-prompt-editor {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--input-bg);
+    overflow: hidden;
+}
+
+.editor-toolbar {
+    display: flex;
+    gap: 8px;
+    padding: 8px 12px;
+    background-color: var(--panel-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.toolbar-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--button-bg);
+    color: var(--primary-text);
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.2s ease;
+}
+
+.toolbar-btn:hover:not(:disabled) {
+    background-color: var(--button-hover-bg);
+    border-color: var(--button-hover-bg);
+}
+
+.toolbar-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.toolbar-btn svg {
+    stroke: var(--primary-text);
+}
+
+.editor-main {
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+}
+
+.text-editor-container {
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+}
+
+.text-editor {
+    width: 100%;
+    min-height: 150px;
+    padding: 8px;
+    border: none;
+    background-color: transparent;
+    color: var(--primary-text);
+    font-size: 0.95em;
+    line-height: 1.5;
+    outline: none;
+    resize: none;
+    font-family: inherit;
+}
+
+.text-editor:focus {
+    background-color: var(--input-bg);
+}
+
+.text-editor:empty::before {
+    content: "在这里输入系统提示词...";
+    color: var(--placeholder-text);
+    opacity: 0.7;
+}
+
+/* 禁用文字样式 */
+.disabled-text {
+    background-color: rgba(128, 128, 128, 0.2);
+    color: #888;
+    padding: 2px 4px;
+    border-radius: 3px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.disabled-text:hover {
+    background-color: rgba(128, 128, 128, 0.3);
+}
+
+/* 隐藏元素栏 */
+.hidden-elements-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    background-color: var(--panel-bg);
+    border-top: 1px solid var(--border-color);
+    min-height: 50px;
+    overflow-x: auto;
+}
+
+.hidden-elements-label {
+    font-size: 0.85em;
+    color: var(--secondary-text);
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.hidden-elements-container {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+/* 隐藏元素小圆点 */
+.hidden-element-dot {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    background-color: var(--user-bubble-bg);
+    color: white;
+    border-radius: 15px;
+    font-size: 0.8em;
+    cursor: grab;
+    transition: all 0.2s ease;
+    position: relative;
+    max-width: 150px;
+}
+
+.hidden-element-dot:hover {
+    background-color: var(--button-hover-bg);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.hidden-element-dot:active {
+    cursor: grabbing;
+    transform: translateY(0);
+}
+
+.hidden-element-dot.dragging {
+    opacity: 0.5;
+    transform: rotate(5deg);
+}
+
+.dot-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
+}
+
+.dot-actions {
+    display: flex;
+    gap: 2px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.hidden-element-dot:hover .dot-actions {
+    opacity: 1;
+}
+
+.dot-rename-btn,
+.dot-delete-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 3px;
+    font-size: 0.7em;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+}
+
+.dot-rename-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.dot-delete-btn:hover {
+    background-color: rgba(255, 0, 0, 0.3);
+}
+
+/* 上下文菜单 */
+.context-menu {
+    background-color: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 4px 0;
+    min-width: 180px;
+    position: fixed;
+    z-index: 10000;
+}
+
+.context-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 0.9em;
+    color: var(--primary-text);
+    transition: background-color 0.2s ease;
+}
+
+.context-menu-item:hover {
+    background-color: var(--accent-bg);
+    color: var(--highlight-text);
+}
+
+.context-menu-item svg {
+    stroke: var(--primary-text);
+    flex-shrink: 0;
+}
+
+.context-menu-item:hover svg {
+    stroke: var(--highlight-text);
+}
+
+/* 隐藏元素预览 */
+.hidden-element-preview {
+    background-color: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 12px;
+    min-width: 200px;
+    max-width: 400px;
+    position: absolute;
+    z-index: 10001;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.preview-header strong {
+    color: var(--highlight-text);
+    font-size: 0.9em;
+}
+
+.preview-close {
+    background: none;
+    border: none;
+    color: var(--secondary-text);
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.preview-close:hover {
+    background-color: var(--accent-bg);
+    color: var(--highlight-text);
+}
+
+.preview-content {
+    color: var(--primary-text);
+    font-size: 0.9em;
+    line-height: 1.4;
+    background-color: var(--input-bg);
+    padding: 8px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.no-hidden-elements {
+    color: var(--placeholder-text);
+    font-style: italic;
+    font-size: 0.85em;
+}
+
+/* 拖拽占位符 */
+.drop-placeholder {
+    width: 20px;
+    height: 20px;
+    border: 2px dashed var(--border-color);
+    border-radius: 50%;
+    margin: 0 4px;
+    background-color: var(--accent-bg);
+    opacity: 0.5;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .editor-toolbar {
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 6px 8px;
+    }
+
+    .toolbar-btn {
+        padding: 4px 8px;
+        font-size: 0.8em;
+    }
+
+    .editor-main {
+        height: 250px;
+    }
+
+    .hidden-elements-bar {
+        padding: 6px 8px;
+        gap: 8px;
+    }
+
+    .hidden-elements-container {
+        gap: 6px;
+    }
+
+    .hidden-element-dot {
+        max-width: 120px;
+        padding: 3px 6px;
+        font-size: 0.75em;
+    }
+}
+
+/* 亮色主题适配 */
+body.light-theme .advanced-prompt-editor {
+    background-color: var(--secondary-bg);
+}
+
+body.light-theme .editor-toolbar {
+    background-color: var(--panel-bg-light);
+}
+
+body.light-theme .context-menu {
+    background-color: var(--secondary-bg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hidden-element-dot {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+    .hidden-element-dot {
+        border: 2px solid white;
+    }
+
+    .disabled-text {
+        border: 1px solid #888;
+    }
+
+    .context-menu {
+        border-width: 2px;
+    }
+}
+
+/* 减少动画模式支持 */
+@media (prefers-reduced-motion: reduce) {
+    .hidden-element-dot {
+        animation: none;
+        transition: none;
+    }
+
+    .toolbar-btn,
+    .context-menu-item,
+    .hidden-element-dot {
+        transition: none;
+    }
+}

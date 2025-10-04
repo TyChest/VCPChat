@@ -48,6 +48,7 @@ const settingsManager = (() => {
     let itemSettingsContainerTitle, selectedItemNameForSettingsSpan, deleteItemBtn;
     let agentSettingsForm, editingAgentIdInput, agentNameInput, agentAvatarInput, agentAvatarPreview;
     let agentSystemPromptTextarea, agentModelInput, agentTemperatureInput;
+    let advancedPromptEditor; // 新增高级提示词编辑器引用
     let agentContextTokenLimitInput, agentMaxOutputTokensInput, agentTopPInput, agentTopKInput;
     let openModelSelectBtn, modelSelectModal, modelList, modelSearchInput, refreshModelsBtn;
     let topicSummaryModelInput, openTopicSummaryModelSelectBtn; // New elements for topic summary model
@@ -122,7 +123,30 @@ const settingsManager = (() => {
         
         editingAgentIdInput.value = agentId;
         agentNameInput.value = agentConfig.name || agentId;
-        agentSystemPromptTextarea.value = agentConfig.systemPrompt || '';
+
+        // 使用高级提示词编辑器设置内容
+        if (advancedPromptEditor) {
+            console.log('[SettingsManager] Loading agent config:', {
+                hasSystemPromptAdvanced: !!agentConfig.systemPromptAdvanced,
+                hasSystemPrompt: !!agentConfig.systemPrompt,
+                systemPromptLength: agentConfig.systemPrompt?.length || 0
+            });
+
+            if (agentConfig.systemPromptAdvanced) {
+                // 如果有高级格式的数据，恢复完整状态
+                console.log('[SettingsManager] Restoring advanced prompt editor state');
+                advancedPromptEditor.setFullValue(agentConfig.systemPromptAdvanced);
+            } else {
+                // 否则设置普通文本
+                console.log('[SettingsManager] Setting simple text value');
+                advancedPromptEditor.setValue(agentConfig.systemPrompt || '');
+            }
+        } else {
+            // 回退到原来的textarea
+            console.warn('[SettingsManager] Advanced editor not available, falling back to textarea');
+            agentSystemPromptTextarea.value = agentConfig.systemPrompt || '';
+        }
+
         agentModelInput.value = agentConfig.model || '';
         agentTemperatureInput.value = agentConfig.temperature !== undefined ? agentConfig.temperature : 0.7;
         agentContextTokenLimitInput.value = agentConfig.contextTokenLimit !== undefined ? agentConfig.contextTokenLimit : 4000;
@@ -165,9 +189,21 @@ const settingsManager = (() => {
     async function saveCurrentAgentSettings(event) {
         event.preventDefault();
         const agentId = editingAgentIdInput.value;
+        // 准备保存的配置
+        const systemPromptValue = advancedPromptEditor ? advancedPromptEditor.getValue().trim() : agentSystemPromptTextarea.value.trim();
+        const systemPromptAdvancedValue = advancedPromptEditor ? advancedPromptEditor.getFullValue() : null;
+
+        console.log('[SettingsManager] Saving agent config:', {
+            hasAdvancedEditor: !!advancedPromptEditor,
+            systemPromptLength: systemPromptValue.length,
+            hasAdvancedData: !!systemPromptAdvancedValue,
+            advancedDataKeys: systemPromptAdvancedValue ? Object.keys(systemPromptAdvancedValue) : []
+        });
+
         const newConfig = {
             name: agentNameInput.value.trim(),
-            systemPrompt: agentSystemPromptTextarea.value.trim(),
+            systemPrompt: systemPromptValue,
+            systemPromptAdvanced: systemPromptAdvancedValue,
             model: agentModelInput.value.trim() || 'gemini-pro',
             temperature: parseFloat(agentTemperatureInput.value),
             contextTokenLimit: parseInt(agentContextTokenLimitInput.value),
@@ -242,6 +278,12 @@ const settingsManager = (() => {
                     currentSelectedItem.config = updatedAgentConfig;
                 } else {
                     Object.assign(currentSelectedItem, updatedAgentConfig);
+                }
+
+                // 确保更新后的配置包含高级提示词编辑器状态
+                if (advancedPromptEditor && updatedAgentConfig) {
+                    updatedAgentConfig.systemPromptAdvanced = advancedPromptEditor.getFullValue();
+                    console.log('[SettingsManager] Updated agent config with advanced prompt data');
                 }
                 
                 // Update other UI parts via callbacks or direct calls if modules are passed in
@@ -392,6 +434,21 @@ const settingsManager = (() => {
             agentAvatarInput = options.elements.agentAvatarInput;
             agentAvatarPreview = options.elements.agentAvatarPreview;
             agentSystemPromptTextarea = options.elements.agentSystemPromptTextarea;
+            // 初始化高级提示词编辑器
+            const editorContainer = document.getElementById('advancedPromptEditorContainer');
+            if (editorContainer && window.AdvancedPromptEditor) {
+                advancedPromptEditor = new window.AdvancedPromptEditor(editorContainer);
+                console.log('[SettingsManager] Advanced Prompt Editor initialized successfully');
+
+                // 添加调试信息
+                console.log('[SettingsManager] Editor container found:', !!editorContainer);
+                console.log('[SettingsManager] AdvancedPromptEditor class available:', !!window.AdvancedPromptEditor);
+            } else {
+                console.warn('[SettingsManager] Advanced Prompt Editor initialization failed:', {
+                    containerFound: !!editorContainer,
+                    classAvailable: !!window.AdvancedPromptEditor
+                });
+            }
             agentModelInput = options.elements.agentModelInput;
             agentTemperatureInput = options.elements.agentTemperatureInput;
             agentContextTokenLimitInput = options.elements.agentContextTokenLimitInput;
